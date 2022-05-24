@@ -1,5 +1,7 @@
 package app;
 
+import utils.TimeDate;
+
 import java.util.Properties;
 
 import javax.mail.Message;
@@ -14,6 +16,7 @@ public class MailSender {
     private String from = "sefrhelpdeskjava@gmail.com";
     private final String host = "smtp.gmail.com";
     Properties properties;
+    TimeDate td = new TimeDate();
     public MailSender() {
         properties = System.getProperties();
 
@@ -48,28 +51,29 @@ public class MailSender {
 
             // Set Subject: header field
             message.setSubject(_subject);
-
+            StringBuilder string = new StringBuilder();
+            string.append(_message);
+            string.append("\n");
+            string.append(td.getTime());
             // Now set the actual message
-            message.setText(_message);
+            message.setText(string.toString());
 
             System.out.println("sending...");
             // Send message
             Transport.send(message);
             System.out.println("Sent message successfully....");
-            Reply(_from, _subject, "Success");
+            Reply(_from, _subject);
         } catch (MessagingException mex) {
             mex.printStackTrace();
         }
 
     }
 
-    public void Reply(String _to,String _subject,String _message){
+    public void Reply(String _to, String _subject){
         Session session = Session.getInstance(properties, new javax.mail.Authenticator() {
 
             protected PasswordAuthentication getPasswordAuthentication() {
-
                 return new PasswordAuthentication(from, "semestralka2022");
-
             }
 
         });
@@ -87,10 +91,10 @@ public class MailSender {
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(_to));
 
             // Set Subject: header field
-            message.setSubject(_subject);
+            message.setSubject("Oznámení o ticketu");
 
             // Now set the actual message
-            message.setText(_message);
+            message.setText("Úspěšně jste poslal ticket '" + _subject + "' ve dne " + td.getTime());
 
             System.out.println("sending...");
             // Send message
@@ -100,33 +104,4 @@ public class MailSender {
             mex.printStackTrace();
         }
     }
-    /*public static void main(String[] args) {
-        // Get system properties
-
-
-        try {
-            // Create a default MimeMessage object.
-            MimeMessage message = new MimeMessage(session);
-
-            // Set From: header field of the header.
-            message.setFrom(new InternetAddress(from));
-
-            // Set To: header field of the header.
-            message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
-
-            // Set Subject: header field
-            message.setSubject("Helpdesk program");
-
-            // Now set the actual message
-            message.setText("funguje to!!!");
-
-            System.out.println("sending...");
-            // Send message
-            Transport.send(message);
-            System.out.println("Sent message successfully....");
-        } catch (MessagingException mex) {
-            mex.printStackTrace();
-        }
-
-    }*/
 }
