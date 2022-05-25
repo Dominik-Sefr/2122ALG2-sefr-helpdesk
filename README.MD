@@ -43,7 +43,7 @@ classDiagram
     App .. Ticket : uses
     App .. User : uses
     Register .. User : uses
-    
+    User .. Ticket : uses
     
 ```
 
