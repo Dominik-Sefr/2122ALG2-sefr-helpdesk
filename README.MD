@@ -17,6 +17,9 @@ Menu v aplikaci je vybírání z číselného seznamu. Po spuštění je uživat
   * `0` Odhlásit se
   * `1` Nový ticket
   * `2` Seznam ticketů
+    * `1` Seřadit podle názvu
+    * `2` Otevřít ticket
+    * `3` Odejít  
   * `3` Smazat ticket
 
 ### Struktura vstupních a výstupních souborů
