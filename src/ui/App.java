@@ -30,6 +30,8 @@ public class App {
         ms = new MailSender();
         userList = stf.LoadUser();
         final User reciever = new User("sefrhelpdeskjava@gmail.com", "semestralka2022");
+        userList.add(reciever);
+        stf.Save(userList);
         User logged = new User("noone@noone.com", "heslo");
         Boolean boollogged = false;
         while (true){
@@ -106,6 +108,7 @@ public class App {
                     String message = sc.next();
                     Ticket t = new Ticket(subject, message, logged.getEmail(), reciever.getEmail(), td.getTime());
                     logged.AddTicket(t);
+                    reciever.AddTicket(t);
                     stf.Save(userList);
                     ms.Send(logged.getEmail(), logged.getPassword(), reciever.getEmail(), subject, message);
                 }
@@ -122,6 +125,7 @@ public class App {
                     System.out.println("Napiš předmět ticketu, který chceš odebrat: ");
                     String subject = sc.next();
                     logged.RemoveTicket(subject);
+                    reciever.RemoveTicket(subject);
                     stf.Save(userList);
                     ms.Send(logged.getEmail(), logged.getPassword(), reciever.getEmail(), "Zrušení ticketu", "Ticket '" + subject + "' byl zrušen");
                 }
