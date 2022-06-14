@@ -10,16 +10,18 @@ Program slouží pro zaslání požadavku na support, uživatel se přihlásí d
 
 Menu v aplikaci je vybírání z číselného seznamu. Po spuštění je uživateli vypsán seznam, zda se chce zaregistrovat nebo přihlásit; program si pamatuje, všechny zaregistrované uživatele. Po přihlášení si uživatel může vybrat, zda se chce odhlásit, udělat nový ticket, smazat ticket nebo vypsat seznam ticketů.
 
+`?` jakýkoli jiný znak než je v nabídce menu
 * `1` – Přihlásit se
 * `2` – Registrovat se
-* `3` – Ukončit aplikaci
+* `?` – Ukončit aplikaci
 * Po přihlášení:
-  * `0` Odhlásit se
+  * `?` Odhlásit se
   * `1` Nový ticket
   * `2` Seznam ticketů
-    * `1` Seřadit podle názvu
-    * `2` Otevřít ticket
-    * `3` Odejít  
+    * `0-n` Ticket, který se má otevřít
+    * `s` seřadí podle názvu
+    * `r` seřadí podle času vytvoření
+    * `?` zpět
   * `3` Smazat ticket
 
 ### Struktura vstupních a výstupních souborů
@@ -29,14 +31,46 @@ Menu v aplikaci je vybírání z číselného seznamu. Po spuštění je uživat
 
 ```mermaid
 classDiagram
-    class MailSender
-    class Ticket
-    class emailChecker
-    class App
-    class SaveToFile
-    class Register
-    class TimeDate
-    class User
+    class MailSender{
+      Reply(String _to, String _subject)
+      Send(String _from, String _password, String _to, String _subject, String _message)
+      javax.mail
+    }
+    class Ticket{
+      getters
+      setter
+      compareTo(Ticket other)
+      toString()  
+    }
+    class emailChecker{
+      isValid(String email)
+    }
+    class App{
+      main()
+    }
+    class SaveToFile{
+      java.io
+      NewFileCheck()
+      SaveToFile()
+      Save(List<User> list)
+      LoadUser()
+    }
+    class Register{
+      addUser(List<User> users, String email, String password)
+      login(List<User> users, String email, String password)
+    }
+    class TimeDate{
+      java.util.date
+      getTime()
+      comp()
+    }
+    class User{
+      AddTicket(Ticket _ticket)
+      getters
+      setters
+      RemoveTicket(String subject)
+      CheckifExists(String subject)
+    }
 
     App .. MailSender : uses
     App .. emailChecker : uses

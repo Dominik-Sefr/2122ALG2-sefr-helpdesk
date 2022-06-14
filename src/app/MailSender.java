@@ -12,21 +12,36 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+/**
+ * Třída implementující knihovnu javax.mail pro posílání emailů
+ */
 public class MailSender {
-    private String from = "sefrhelpdeskjava@gmail.com";
-    private final String host = "smtp.gmail.com";
+    private String from = "sefrhelpdeskjava@centrum.cz";
+    private final String host = "smtp.centrum.cz";
     Properties properties;
     TimeDate td = new TimeDate();
+
+    /**
+     * konstruktor pro nastavení smtp serveru
+     */
     public MailSender() {
         properties = System.getProperties();
-
-        // Setup mail server
         properties.put("mail.smtp.host", host);
         properties.put("mail.smtp.port", "465");
         properties.put("mail.smtp.ssl.enable", "true");
         properties.put("mail.smtp.auth", "true");
     }
-    public void Send(String _from, String _password, String _to, String _subject, String _message){
+
+    /**
+     * metoda přejímá informace o ticketu a posílá email adminovi
+     * @param _from
+     * @param _password
+     * @param _to
+     * @param _subject
+     * @param _message
+     * @return boolean
+     */
+    public boolean Send(String _from, String _password, String _to, String _subject, String _message){
         Session session = Session.getInstance(properties, new javax.mail.Authenticator() {
 
             protected PasswordAuthentication getPasswordAuthentication() {
@@ -38,7 +53,7 @@ public class MailSender {
         });
 
         // Used to debug SMTP issues
-        session.setDebug(true);
+        //session.setDebug(true);
         try {
             // Create a default MimeMessage object.
             MimeMessage message = new MimeMessage(session);
@@ -58,28 +73,39 @@ public class MailSender {
             // Now set the actual message
             message.setText(string.toString());
 
-            System.out.println("sending...");
+            System.out.println("posílám...");
             // Send message
             Transport.send(message);
-            System.out.println("Sent message successfully....");
-            Reply(_from, _subject);
+            if(Reply(_from, _subject)){
+                return true;
+            }
+            else{
+                return false;
+            }
         } catch (MessagingException mex) {
-            mex.printStackTrace();
+            //mex.printStackTrace();
+            return false;
         }
 
     }
 
-    public void Reply(String _to, String _subject){
+    /**
+     * stejná metoda jako send, jen tato posílá potvrzovací mail uživateli
+     * @param _to
+     * @param _subject
+     * @return boolean
+     */
+    public boolean Reply(String _to, String _subject){
         Session session = Session.getInstance(properties, new javax.mail.Authenticator() {
 
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(from, "semestralka2022");
+                return new PasswordAuthentication(from, "Semestralka2022");
             }
 
         });
 
         // Used to debug SMTP issues
-        session.setDebug(true);
+        //  session.setDebug(true);
         try {
             // Create a default MimeMessage object.
             MimeMessage message = new MimeMessage(session);
@@ -96,12 +122,12 @@ public class MailSender {
             // Now set the actual message
             message.setText("Úspěšně jste poslal ticket '" + _subject + "' ve dne " + td.getTime());
 
-            System.out.println("sending...");
             // Send message
             Transport.send(message);
-            System.out.println("Sent message successfully....");
+            return true;
         } catch (MessagingException mex) {
-            mex.printStackTrace();
+            //mex.printStackTrace();
+            return false;
         }
     }
 }
