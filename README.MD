@@ -148,3 +148,46 @@ public class MailSender {
 
     }
 ```
+# Struktura vstupních a výstupních souborů
+
+![img.png](images/img.png)
+
+Kus zápisu ze souboru, kam si uživatel může uložit všechny své tickety.
+
+![img.png](images/img_1.png)
+
+Kus zápisu ze souboru, kam se ukládají všechna data o registracích a ticketech (databáze)
+
+# Testy
+
+## 1) Přihlášení
+
+![img.png](images/login.png)
+
+## 2) Registrace, špatný formát emailu
+![img.png](images/register.png)
+
+## 3) Posílání ticketu
+![img.png](images/sending.png)
+
+## 4) výpis ticketu
+
+![img.png](images/vypis.png)
+
+## 5) výpis ticketů
+![img.png](images/vypis2.png)
+
+## 6) odebrání ticketu
+![img.png](images/del.png)
+
+## 7) řazení ticketů abecedně
+![img.png](images/abc.png)
+
+## 8) řazení podle času
+![img.png](images/time.png)
+
+## 9) Odhlášení se
+![img.png](images/logout.png)
+
+## 10) vypnutí programu
+![img.png](images/quit.png)

@@ -8,6 +8,7 @@ import utils.SaveToFile;
 import utils.TimeDate;
 import utils.emailChecker;
 
+import java.sql.Array;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -23,19 +24,40 @@ public class App {
     private static MailSender ms;
     public static void main(String[] args) {
         userList = new ArrayList<User>();
-        stf = new SaveToFile();
+        try {
+            stf = new SaveToFile();
+        }
+        catch(Exception e){
+            System.out.println("Špatný soubor");
+        }
         eC = new emailChecker();
         reg = new Register();
         sc = new Scanner(System.in);
         td = new TimeDate();
         ms = new MailSender();
         if(stf.NewFileCheck()){
-            stf.Save(userList);
+            try {
+                stf.Save(userList);
+            }
+            catch(Exception e){
+                System.out.println("Špatný soubor");
+            }
         }
-        userList = stf.LoadUser();
+        try{
+            userList = stf.LoadUser();
+        } catch(Exception e){
+            System.out.println("Chyba vstupního souboru, smaž users.txt");
+            System.out.println("Ukončuji program...");
+            return;
+        }
         final User reciever = new User("sefrhelpdeskjava@centrum.cz", "Semestralka2022");
         userList.add(reciever);
-        stf.Save(userList);
+        try {
+            stf.Save(userList);
+        }
+        catch(Exception e){
+            System.out.println("Špatný soubor");
+        }
         User logged = new User("noone@noone.com", "heslo");
         Boolean boollogged = false;
         while (true){
@@ -95,11 +117,21 @@ public class App {
                     String regpass = sc.next();
                     if(reg.addUser(userList, regmail, regpass)){
                         userList.add(new User(regmail,regpass));
-                        stf.Save(userList);
+                        try {
+                            stf.Save(userList);
+                        }
+                        catch(Exception e){
+                            System.out.println("Špatný soubor");
+                        }
                     }
                 } else {
                     System.out.println("Ukládám data");
-                    stf.Save(userList);
+                    try {
+                        stf.Save(userList);
+                    }
+                    catch(Exception e){
+                        System.out.println("Špatný soubor");
+                    }
                     System.out.println("Ukončuji program...");
                     return;
                 }
@@ -108,7 +140,7 @@ public class App {
                 String menu2 = "";
                 if(logged.getEmail().equals(reciever.getEmail())){
                     System.out.println("--- Přihlášen: " + logged.getEmail() + " ---");
-                    System.out.println("0) Odhlásit se\n2) tickety\n3) Odebrat ticket");
+                    System.out.println("?) Odhlásit se\n2) tickety\n3) Odebrat ticket");
                     menu2 = sc.next();
                 }
                 else {
@@ -128,7 +160,12 @@ public class App {
                                 System.out.println("Ticket odeslán");
                                 logged.AddTicket(t);
                                 reciever.AddTicket(t);
-                                stf.Save(userList);
+                                try {
+                                    stf.Save(userList);
+                                }
+                                catch(Exception e){
+                                    System.out.println("Špatný soubor");
+                                }
                             } else {
                                 System.out.println(logged.getPassword() + " " + logged.getEmail());
                                 System.out.println("Ticket nebyl odeslán");
@@ -145,7 +182,7 @@ public class App {
                         System.out.println(i + " " + t.getSubject() + " : " + ((t.getDone()) ? "Hotovo" : "Aktivní"));
                         i++;
                     }
-                    System.out.println("\n0-n) pro zobrazení ticketu zadejte jeho číslo\ns) sort podle jmen\nr) sort podle času\n?) zpět\n");
+                    System.out.println("\n0-n) pro zobrazení ticketu zadejte jeho číslo\ns) sort podle jmen\nr) sort podle času\nv) uložit tickety do souboru\n?) zpět\n");
                     String inpt = sc.next();
                     for(int j = 0; j < logged.getTickets().size(); j++){
                         if(Integer.toString(j).equals(inpt)){
@@ -187,6 +224,19 @@ public class App {
                             p++;
                         }
                     }
+                    if(inpt.equals("v")){
+                        StringBuilder strn = new StringBuilder();
+                        List<Ticket> copy = new ArrayList<>(logged.getTickets());
+                        strn.append("Tickets of user: " + logged.getEmail());
+                        for(Ticket tick : copy){
+                            strn.append("\n" + tick.toString());
+                        }
+                        try{
+                            stf.SaveTicketsToFile(strn.toString());
+                        } catch(Exception e){
+                            System.out.println("Chyba v uložení do souboru");
+                        }
+                    }
                 }
                 else if(menu2.equals("3")){
                     System.out.println("--- Přihlášen: " + logged.getEmail() + " ---");
@@ -209,7 +259,12 @@ public class App {
                                 logged.RemoveTicket(subject);
                                 reciever.RemoveTicket(subject);
                             }
-                            stf.Save(userList);
+                            try {
+                                stf.Save(userList);
+                            }
+                            catch(Exception e){
+                                System.out.println("Špatný soubor");
+                            }
                         } else {
                             System.out.println("Ticket nebylo možné smazat");
                         }
@@ -220,7 +275,12 @@ public class App {
                 }
                 else {
                     boollogged = false;
-                    stf.Save(userList);
+                    try {
+                        stf.Save(userList);
+                    }
+                    catch(Exception e){
+                        System.out.println("Špatný soubor");
+                    }
                     continue;
                 }
             }

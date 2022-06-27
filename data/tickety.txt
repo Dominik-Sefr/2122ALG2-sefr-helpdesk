@@ -1,0 +1,30 @@
+Tickets of user: sefruser@centrum.cz
+
+
+from: sefruser@centrum.cz
+to: sefrhelpdeskjava@centrum.cz
+Subject: předmět
+Message: zpráva
+State: false
+
+2022-06-22 at 12:34:05 SELČ
+
+
+
+from: sefruser@centrum.cz
+to: sefrhelpdeskjava@centrum.cz
+Subject: ticket
+Message: zrasdas
+State: false
+
+2022-06-22 at 12:36:56 SELČ
+
+
+
+from: sefruser@centrum.cz
+to: sefrhelpdeskjava@centrum.cz
+Subject: Ahoj
+Message: ahoj
+State: false
+
+2022-06-22 at 12:37:29 SELČ
